@@ -8,7 +8,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThunderIDProvider
       clientId="1FLcy_SAgu-HiU5G5BHlGw"
-      baseUrl={window.location.origin}
+      baseUrl="http://thunder.openchoreo.localhost:8080"
       scopes={['openid', 'profile', 'email', 'system']}
     >
       <App />
