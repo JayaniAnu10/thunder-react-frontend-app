@@ -7,7 +7,7 @@ import { ThunderIDProvider } from '@thunderid/react'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThunderIDProvider
-      clientId="1FLcy_SAgu-HiU5G5BHlGw"
+      clientId="aq3LXdAz4AnAUxmYISTp7w"
       baseUrl="http://endpoint-1-frontend-development-default-ec673672.openchoreoapis.localhost:19080"
       scopes={['openid', 'profile', 'email', 'system']}
     >
