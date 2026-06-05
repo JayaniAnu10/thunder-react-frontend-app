@@ -59,8 +59,7 @@ function resolveEmailFromClaims(claims: Record<string, unknown>): string {
 }
 
 // ─── Todo Section ─────────────────────────────────────────────────────────────
-
-function TodoSection() {
+function TodoSection({ role, email }: { role: string; email: string }) {
   const { getAccessToken } = useThunderID()
   const [todos, setTodos] = useState<Todo[]>([])
   const [newTodo, setNewTodo] = useState('')
@@ -122,7 +121,12 @@ function TodoSection() {
 
   return (
     <section className="dashboard-card" style={{ marginTop: '2rem' }}>
-      <h2>My Todos <span style={{ fontSize: '0.8rem', color: '#888' }}>(from Go backend)</span></h2>
+      <h2>
+        {role === 'admin' ? '📋 All Users Todos' : '📝 My Todos'}
+        <span style={{ fontSize: '0.8rem', color: '#888', marginLeft: '0.5rem' }}>
+          {role === 'admin' ? '(viewing all users — admin)' : '(only your todos)'}
+        </span>
+      </h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
         <input
@@ -143,12 +147,17 @@ function TodoSection() {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {todos.map(todo => (
             <li key={todo.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
-              <span>
-                {todo.text}
-                <small style={{ color: '#888', marginLeft: '0.5rem' }}>by {todo.created_by}</small>
-              </span>
-              <button onClick={() => deleteTodo(todo.id)} style={{ color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
-            </li>
+  <span>
+    {todo.text}
+    {role === 'admin' && (
+      <small style={{ color: '#888', marginLeft: '0.5rem' }}>by {todo.created_by}</small>
+    )}
+  </span>
+  {/* Only show delete button for own todos */}
+  {todo.created_by === email && (
+    <button onClick={() => deleteTodo(todo.id)} style={{ color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
+  )}
+</li>
           ))}
         </ul>
       )}
@@ -264,7 +273,7 @@ function RoleDashboard() {
           : <UserDashboard displayName={displayName} email={email} />}
       </section>
 
-      <TodoSection />
+     <TodoSection role={resolvedRole} email={email} />
     </>
   )
 }
